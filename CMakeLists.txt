@@ -291,6 +291,14 @@ if(dagmc)
 endif()
 
 #===============================================================================
+# Pybind11
+#===============================================================================
+
+add_subdirectory(vendor/pybind11)
+pybind11_add_module(openmc_cpp openmc/cppapi/cppapi.cpp)
+target_link_libraries(openmc_cpp PUBLIC libopenmc)
+
+#===============================================================================
 # openmc executable
 #===============================================================================
 add_executable(openmc src/main.cpp)
