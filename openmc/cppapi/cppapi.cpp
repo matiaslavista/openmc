@@ -23,6 +23,16 @@ int init(vector<string> argv = {}, const void *intracomm = NULL)
   return openmc_init(argv_char.size(), argv_char.data(), intracomm);
 }
 
+int run()
+{
+  return openmc_run();
+}
+
+int finalize()
+{
+    return openmc_finalize();
+}
+
 } // namespace openmc
 
 PYBIND11_MODULE(openmc_cpp, m)
@@ -38,6 +48,8 @@ PYBIND11_MODULE(openmc_cpp, m)
 
   m.def("init", &openmc::init, py::arg("argv") = py::list(), 
     py::arg("intracomm") = NULL);
+  m.def("run", &openmc::run); 
+  m.def("finalize", &openmc::finalize);
 
 #ifdef VERSION_INFO
   m.attr("__version__") = VERSION_INFO;
