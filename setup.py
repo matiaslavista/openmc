@@ -27,9 +27,6 @@ ext_suffix = get_config_var('EXT_SUFFIX')
 with open('openmc/__init__.py', 'r') as f:
     version = f.readlines()[-1].split()[-1].strip("'")
 
-print("----------------------- HERE --------------------")
-print(ext_suffix)
-
 kwargs = {
     'name': 'openmc',
     'version': version,
