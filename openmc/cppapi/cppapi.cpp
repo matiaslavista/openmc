@@ -14,17 +14,23 @@ namespace openmc {
 using std::string;
 using std::vector;
 
-int init(vector<string> argv = {}, const void *intracomm = NULL) 
+int init(vector<string> argv = {}, const void* intracomm = NULL) 
 {
-  vector<char *> argv_char(argv.size());
+  vector<char*> argv_char(argv.size());
   std::transform(argv.begin(), argv.end(), argv_char.begin(),
-                 [](string &a) { return const_cast<char *>(a.c_str()); });
+                 [](string& a) { return const_cast<char*>(a.c_str()); });
   return openmc_init(argv_char.size(), argv_char.data(), intracomm);
 }
 
 int run() { return openmc_run(); }
 
 int finalize() { return openmc_finalize(); }
+
+int simulation_finalize() { return openmc_simulation_finalize(); }
+
+int simulation_init() { return openmc_simulation_init(); }
+
+int next_batch(int* status) { return next_batch(status); }
 
 } // namespace openmc
 
