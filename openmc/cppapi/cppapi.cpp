@@ -14,7 +14,7 @@ namespace openmc {
 using std::string;
 using std::vector;
 
-int init(vector<string> argv = {}, const void* intracomm = NULL) 
+int init(vector<string> argv = {}, const void* intracomm = nullptr)
 {
   vector<char*> argv_char(argv.size());
   std::transform(argv.begin(), argv.end(), argv_char.begin(),
@@ -30,7 +30,6 @@ int simulation_finalize() { return openmc_simulation_finalize(); }
 
 int simulation_init() { return openmc_simulation_init(); }
 
-int next_batch(int* status) { return next_batch(status); }
 
 } // namespace openmc
 
@@ -46,9 +45,11 @@ PYBIND11_MODULE(openmc_cpp, m)
     )pbdoc";
 
   m.def("init", &openmc::init, py::arg("argv") = py::list(),
-        py::arg("intracomm") = NULL);
+        py::arg("intracomm") = (void*) nullptr);
   m.def("run", &openmc::run);
   m.def("finalize", &openmc::finalize);
+  m.def("simulation_finalize", &openmc::simulation_finalize);
+  m.def("simulation_init", &openmc::simulation_init);
 
 #ifdef VERSION_INFO
   m.attr("__version__") = VERSION_INFO;
