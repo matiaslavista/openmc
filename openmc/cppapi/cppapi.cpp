@@ -43,8 +43,9 @@ int next_batch()
 {
   int status = 0;
   int ret = openmc_next_batch(&status);
-  if (ret) { exception_handler(__func__,ret); }
-  else if (status) { exception_handler(__func__,status); }
+  if (ret) { 
+      exception_handler(__func__,ret); 
+  }
   return status;
 }
 
