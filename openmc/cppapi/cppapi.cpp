@@ -14,6 +14,15 @@ namespace openmc {
 using std::string;
 using std::vector;
 
+// General exception handler 
+// This function is called by openmc_cppapi functions
+// that wrap error codes, and throw exceptions
+void exception_handler(string func, int err) {
+  string msg = "function " + func + " exited with error code: "
+      + std::to_string(err);
+  throw std::runtime_error(msg);
+}
+
 int init(vector<string> argv = {}, const void* intracomm = nullptr)
 {
   vector<char*> argv_char(argv.size());
@@ -30,6 +39,15 @@ int simulation_finalize() { return openmc_simulation_finalize(); }
 
 int simulation_init() { return openmc_simulation_init(); }
 
+int next_batch()
+{
+  int status = 0;
+  int ret = openmc_next_batch(&status);
+  if (ret) { 
+      exception_handler(__func__,ret); 
+  }
+  return status;
+}
 
 } // namespace openmc
 
@@ -50,7 +68,7 @@ PYBIND11_MODULE(openmc_cpp, m)
   m.def("finalize", &openmc::finalize);
   m.def("simulation_finalize", &openmc::simulation_finalize);
   m.def("simulation_init", &openmc::simulation_init);
-
+  m.def("next_batch", &openmc::next_batch);
 #ifdef VERSION_INFO
   m.attr("__version__") = VERSION_INFO;
 #else
