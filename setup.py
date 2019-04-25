@@ -4,6 +4,7 @@ import glob
 import sys
 import numpy as np
 
+from distutils.sysconfig import get_config_var
 from setuptools import setup, find_packages
 try:
     from Cython.Build import cythonize
@@ -12,11 +13,14 @@ except ImportError:
     have_cython = False
 
 
+
 # Determine shared library suffix
 if sys.platform == 'darwin':
     suffix = 'dylib'
 else:
     suffix = 'so'
+
+ext_suffix = get_config_var('EXT_SUFFIX')
 
 # Get version information from __init__.py. This is ugly, but more reliable than
 # using an import.
@@ -31,6 +35,7 @@ kwargs = {
 
     # Data files and librarries
     'package_data': {
+        'openmc.cppapi':['openmc_cpp{}'.format(ext_suffix)],
         'openmc.capi': ['libopenmc.{}'.format(suffix)],
         'openmc.data': ['mass16.txt', 'BREMX.DAT', '*.h5']
     },
