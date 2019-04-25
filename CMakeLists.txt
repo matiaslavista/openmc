@@ -284,7 +284,8 @@ endif()
 #===============================================================================
 
 add_subdirectory(vendor/pybind11)
-pybind11_add_module(openmc_cpp openmc/cppapi/cppapi.cpp)
+file(GLOB_RECURSE OPENMC_SOURCES src/cppapi/**.cpp)
+pybind11_add_module(openmc_cpp ${OPENMC_SOURCES})
 target_compile_options(openmc_cpp PRIVATE -Wno-deprecated-declarations)
 target_link_libraries(openmc_cpp PUBLIC libopenmc)
 
@@ -314,7 +315,7 @@ add_custom_command(TARGET libopenmc POST_BUILD
 add_custom_command(TARGET openmc_cpp POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy
   $<TARGET_FILE:openmc_cpp>
-  ${CMAKE_CURRENT_SOURCE_DIR}/openmc/cppapi/$<TARGET_FILE_NAME:openmc_cpp>
+  ${CMAKE_CURRENT_SOURCE_DIR}/openmc/core/$<TARGET_FILE_NAME:openmc_cpp>
   COMMENT "Copying openmc_cpp to Python module directory")
 
 #===============================================================================
