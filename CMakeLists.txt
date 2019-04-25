@@ -284,8 +284,10 @@ endif()
 #===============================================================================
 
 add_subdirectory(vendor/pybind11)
-file(GLOB_RECURSE OPENMC_SOURCES src/cppapi/**.cpp)
-pybind11_add_module(openmc_cpp ${OPENMC_SOURCES})
+pybind11_add_module(openmc_cpp 
+    src/cppapi/cppapi.cpp 
+    src/cppapi/test.cpp 
+    )
 target_compile_options(openmc_cpp PRIVATE -Wno-deprecated-declarations)
 target_link_libraries(openmc_cpp PUBLIC libopenmc)
 
