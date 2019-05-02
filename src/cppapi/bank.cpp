@@ -31,4 +31,5 @@ void init_bank(py::module& m)
     //.def_readwrite("particle",&Particle::Bank::particle)
 }
 
-} 
+}
+
