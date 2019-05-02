@@ -7,7 +7,6 @@
 #include <stdexcept>
 #include <vector>
 
-//template class std::vector<openmc::Particle::Bank>;
 
 namespace openmc {
 
@@ -17,9 +16,7 @@ namespace py = pybind11;
 //==============================================================================
 // CPP API
 //==============================================================================
-
-
-
+//Add elements of banks to the module
 void init_bank(py::module& m)
 {
   m.def("source_bank", &openmc_source_bank_cpp, py::return_value_policy::reference);
@@ -32,8 +29,6 @@ void init_bank(py::module& m)
     //.def_readwrite("r",&Particle::Bank::r)
     //.def_readwrite("u",&Particle::Bank::u)
     //.def_readwrite("particle",&Particle::Bank::particle)
-  //py::class_<Position>(m,"position")
-    //.def(py::init<>())
 }
 
 } 

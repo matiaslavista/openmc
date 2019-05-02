@@ -4,17 +4,11 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-
-// Without an explicit instantiation of vector<Bank>, the Intel compiler
-// will complain about the threadprivate directive on filter_matches. Note that
-// this has to happen *outside* of the openmc namespace
-
+//This file is exclusively to allow cppapi to see the declaration of adding
+//the bank to the pythong shared module
 
 namespace openmc {
 namespace py = pybind11;
-//==============================================================================
-// Non-member functions
-//==============================================================================
 void init_bank(py::module&);
 } // namespace openmc
 

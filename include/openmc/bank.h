@@ -27,8 +27,6 @@ extern std::vector<Particle::Bank> secondary_bank;
 extern std::vector<Particle::Bank> master_fission_bank;
 #endif
 
-
-
 #pragma omp threadprivate(fission_bank, secondary_bank)
 
 } // namespace simulation
@@ -40,10 +38,8 @@ std::vector<Particle::Bank>& openmc_fission_bank_cpp();
 // Non-member functions
 //==============================================================================
 
-
 void free_memory_bank();
 
 } // namespace openmc
-
 
 #endif // OPENMC_BANK_H
