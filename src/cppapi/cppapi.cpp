@@ -1,5 +1,7 @@
 
 #include "openmc/capi.h"
+#include "openmc/cppapi/bank.h"
+
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -53,6 +55,7 @@ int next_batch()
 
 PYBIND11_MODULE(openmc_cpp, m) 
 {
+  openmc::init_bank(m);
   m.doc() = R"pbdoc(
         C++ API to OpenMC
         -----------------------
