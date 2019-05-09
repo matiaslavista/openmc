@@ -18,7 +18,7 @@ std::tuple<double, double> get_keff(){
 //==============================================================================
 // CPP API
 //==============================================================================
-//Add elements of banks to the module
+//Add elements of eigenvalue to the module
 void init_eigenvalue(py::module& m)
 {
   m.def("get_keff", &openmc::get_keff);
