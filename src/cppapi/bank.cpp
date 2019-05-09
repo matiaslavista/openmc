@@ -1,7 +1,6 @@
 
 #include "openmc/bank.h"
 #include "openmc/cppapi/bank.h"
-#include "openmc/capi.h"
 #include "openmc/error.h"
 
 #include <stdexcept>
@@ -21,15 +20,19 @@ void init_bank(py::module& m)
 {
   m.def("source_bank", &openmc_source_bank_cpp, py::return_value_policy::reference);
   m.def("fission_bank", &openmc_fission_bank_cpp, py::return_value_policy::reference);
+  py::enum_<Particle::Type>(m,"Type")
+    .value("neutron", Particle::Type::neutron)
+    .value("photon", Particle::Type::photon)
+    .value("electron", Particle::Type::electron)
+    .value("positron", Particle::Type::positron);
   py::class_<Particle::Bank>(m,"Bank")
     .def(py::init<>())
     .def_readwrite("E",&Particle::Bank::E)
     .def_readwrite("wgt",&Particle::Bank::wgt)
     .def_readwrite("delayed_group",&Particle::Bank::delayed_group)
-    .def_readwrite("r",&Particle::Bank::r);
-    //.def_readwrite("u",&Particle::Bank::u)
-    //.def_readwrite("particle",&Particle::Bank::particle)
+    .def_readwrite("r",&Particle::Bank::r)
+    .def_readwrite("u",&Particle::Bank::u)
+    .def_readwrite("particle",&Particle::Bank::particle);
 }
 
 }
-
