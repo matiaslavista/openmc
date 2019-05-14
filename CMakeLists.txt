@@ -290,7 +290,8 @@ pybind11_add_module(openmc_cpp
     src/cppapi/eigenvalue.cpp 
     src/cppapi/position.cpp 
     )
-target_compile_options(openmc_cpp PRIVATE -Wno-deprecated-declarations)
+target_compile_options(openmc_cpp PRIVATE ${OpenMP_CXX_FLAGS} 
+    -Wno-deprecated-declarations)
 target_link_libraries(openmc_cpp PUBLIC libopenmc)
 
 #===============================================================================

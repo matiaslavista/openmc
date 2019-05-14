@@ -11,10 +11,28 @@ namespace openmc {
 
 using std::vector;
 namespace py = pybind11;
-
 //==============================================================================
 // CPP API
 //==============================================================================
+
+//Retrieves the global source Particle bank for python
+std::vector<Particle::Bank>& openmc_source_bank_cpp()
+{
+  if (simulation::source_bank.size() == 0) {
+    throw std::runtime_error("Source bank has not been allocated.");
+  }
+  return simulation::source_bank;
+}
+
+//Retrieves the global fission Particle bank for python
+std::vector<Particle::Bank>& openmc_fission_bank_cpp()
+{
+  if (simulation::fission_bank.size() == 0) {
+    throw std::runtime_error("Fission bank has not been allocated.");
+  }
+  return simulation::fission_bank;
+}
+
 //Add elements of banks to the module
 void init_bank(py::module& m)
 {

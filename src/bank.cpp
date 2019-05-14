@@ -69,24 +69,5 @@ extern "C" int openmc_fission_bank(void** ptr, int64_t* n)
   }
 }
 
-//==============================================================================
-// CPP API
-//==============================================================================
-std::vector<Particle::Bank>& openmc_source_bank_cpp()
-{
-  if (simulation::source_bank.size() == 0) {
-    throw std::runtime_error("Source bank has not been allocated.");
-  }
-  return simulation::source_bank;
-}
-
-std::vector<Particle::Bank>& openmc_fission_bank_cpp()
-{
-  if (simulation::fission_bank.size() == 0) {
-    throw std::runtime_error("Fission bank has not been allocated.");
-  }
-  return simulation::fission_bank;
-}
-
 } // namespace openmc
 
