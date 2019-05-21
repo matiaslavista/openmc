@@ -2,6 +2,7 @@
 #include "openmc/cppapi/bank.h"
 #include "openmc/cppapi/position.h"
 #include "openmc/cppapi/eigenvalue.h"
+#include "openmc/cppapi/plot.h"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -19,7 +20,8 @@ using std::vector;
 // General exception handler 
 // This function is called by openmc_cppapi functions
 // that wrap error codes, and throw exceptions
-void exception_handler(string func, int err) {
+void exception_handler(string func, int err) 
+{
   string msg = "function " + func + " exited with error code: "
       + std::to_string(err);
   throw std::runtime_error(msg);
@@ -57,6 +59,7 @@ PYBIND11_MODULE(openmc_cpp, m)
   openmc::init_position(m);
   openmc::init_bank(m);
   openmc::init_eigenvalue(m);
+  openmc::init_plot(m);
   m.doc() = R"pbdoc(
         C++ API to OpenMC
         -----------------------

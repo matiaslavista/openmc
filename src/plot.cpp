@@ -6,6 +6,7 @@
 
 #include "xtensor/xview.hpp"
 
+#include "openmc/capi.h"
 #include "openmc/constants.h"
 #include "openmc/file_utils.h"
 #include "openmc/geometry.h"

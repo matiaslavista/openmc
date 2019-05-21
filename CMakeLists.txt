@@ -288,6 +288,7 @@ pybind11_add_module(openmc_cpp
     src/cppapi/cppapi.cpp 
     src/cppapi/bank.cpp 
     src/cppapi/eigenvalue.cpp 
+    src/cppapi/plot.cpp 
     src/cppapi/position.cpp 
     )
 target_compile_options(openmc_cpp PRIVATE ${OpenMP_CXX_FLAGS} 
