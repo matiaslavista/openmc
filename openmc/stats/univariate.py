@@ -7,6 +7,7 @@ from xml.etree import ElementTree as ET
 import numpy as np
 
 import openmc.checkvalue as cv
+from openmc._xml import get_text
 from openmc.mixin import EqualityMixin
 
 
@@ -31,6 +32,29 @@ class Univariate(EqualityMixin, metaclass=ABCMeta):
     @abstractmethod
     def __len__(self):
         return 0
+
+    @classmethod
+    @abstractmethod
+    def from_xml_element(cls, elem):
+        distribution = get_text(elem, 'type')
+        if distribution == 'discrete':
+            return Discrete.from_xml_element(elem)
+        elif distribution == 'uniform':
+            return Uniform.from_xml_element(elem)
+        elif distribution == 'maxwell':
+            return Maxwell.from_xml_element(elem)
+        elif distribution == 'watt':
+            return Watt.from_xml_element(elem)
+        elif distribution == 'normal':
+            return Normal.from_xml_element(elem)
+        elif distribution == 'muir':
+            return Muir.from_xml_element(elem)
+        elif distribution == 'tabular':
+            return Tabular.from_xml_element(elem)
+        elif distribution == 'legendre':
+            return Legendre.from_xml_element(elem)
+        elif distribution == 'mixture':
+            return Mixture.from_xml_element(elem)
 
 
 class Discrete(Univariate):
@@ -110,6 +134,26 @@ class Discrete(Univariate):
 
         return element
 
+    @classmethod
+    def from_xml_element(cls, elem):
+        """Generate discrete distribution from an XML element
+
+        Parameters
+        ----------
+        elem : xml.etree.ElementTree.Element
+            XML element
+
+        Returns
+        -------
+        openmc.stats.Discrete
+            Discrete distribution generated from XML element
+
+        """
+        params = [float(x) for x in get_text(elem, 'parameters').split()]
+        x = params[:len(params)//2]
+        p = params[len(params)//2:]
+        return cls(x, p)
+
 
 class Uniform(Univariate):
     """Distribution with constant probability over a finite interval [a,b]
@@ -181,6 +225,24 @@ class Uniform(Univariate):
         element.set("parameters", '{} {}'.format(self.a, self.b))
         return element
 
+    @classmethod
+    def from_xml_element(cls, elem):
+        """Generate uniform distribution from an XML element
+
+        Parameters
+        ----------
+        elem : xml.etree.ElementTree.Element
+            XML element
+
+        Returns
+        -------
+        openmc.stats.Uniform
+            Uniform distribution generated from XML element
+
+        """
+        params = get_text(elem, 'parameters').split()
+        return cls(*map(float, params))
+
 
 class Maxwell(Univariate):
     """Maxwellian distribution in energy.
@@ -236,6 +298,24 @@ class Maxwell(Univariate):
         element.set("type", "maxwell")
         element.set("parameters", str(self.theta))
         return element
+
+    @classmethod
+    def from_xml_element(cls, elem):
+        """Generate Maxwellian distribution from an XML element
+
+        Parameters
+        ----------
+        elem : xml.etree.ElementTree.Element
+            XML element
+
+        Returns
+        -------
+        openmc.stats.Maxwell
+            Maxwellian distribution generated from XML element
+
+        """
+        theta = float(get_text(elem, 'parameters'))
+        return cls(theta)
 
 
 class Watt(Univariate):
@@ -308,11 +388,30 @@ class Watt(Univariate):
         element.set("parameters", '{} {}'.format(self.a, self.b))
         return element
 
+    @classmethod
+    def from_xml_element(cls, elem):
+        """Generate Watt distribution from an XML element
+
+        Parameters
+        ----------
+        elem : xml.etree.ElementTree.Element
+            XML element
+
+        Returns
+        -------
+        openmc.stats.Watt
+            Watt distribution generated from XML element
+
+        """
+        params = get_text(elem, 'parameters').split()
+        return cls(*map(float, params))
+
+
 class Normal(Univariate):
     r"""Normally distributed sampling.
 
     The Normal Distribution is characterized by two parameters
-    :math:`\mu` and :math:`\sigma` and has density function 
+    :math:`\mu` and :math:`\sigma` and has density function
     :math:`p(X) dX = 1/(\sqrt{2\pi}\sigma) e^{-(X-\mu)^2/(2\sigma^2)}`
 
     Parameters
@@ -325,9 +424,9 @@ class Normal(Univariate):
     Attributes
     ----------
     mean_value : float
-        Mean of the Normal distribution 
+        Mean of the Normal distribution
     std_dev : float
-        Standard deviation of the Normal distribution 
+        Standard deviation of the Normal distribution
     """
 
     def __init__(self, mean_value, std_dev):
@@ -377,20 +476,39 @@ class Normal(Univariate):
         element.set("parameters", '{} {}'.format(self.mean_value, self.std_dev))
         return element
 
+    @classmethod
+    def from_xml_element(cls, elem):
+        """Generate Normal distribution from an XML element
+
+        Parameters
+        ----------
+        elem : xml.etree.ElementTree.Element
+            XML element
+
+        Returns
+        -------
+        openmc.stats.Normal
+            Normal distribution generated from XML element
+
+        """
+        params = get_text(elem, 'parameters').split()
+        return cls(*map(float, params))
+
+
 class Muir(Univariate):
     """Muir energy spectrum.
 
-    The Muir energy spectrum is a Gaussian spectrum, but for 
+    The Muir energy spectrum is a Gaussian spectrum, but for
     convenience reasons allows the user 3 parameters to define
     the distribution, e0 the mean energy of particles, the mass
-    of reactants m_rat, and the ion temperature kt. 
+    of reactants m_rat, and the ion temperature kt.
 
     Parameters
     ----------
     e0 : float
         Mean of the Muir distribution in units of eV
     m_rat : float
-        Ratio of the sum of the masses of the reaction inputs to an 
+        Ratio of the sum of the masses of the reaction inputs to an
         AMU
     kt : float
          Ion temperature for the Muir distribution in units of eV
@@ -400,7 +518,7 @@ class Muir(Univariate):
     e0 : float
         Mean of the Muir distribution in units of eV
     m_rat : float
-        Ratio of the sum of the masses of the reaction inputs to an 
+        Ratio of the sum of the masses of the reaction inputs to an
         AMU
     kt : float
          Ion temperature for the Muir distribution in units of eV
@@ -464,6 +582,24 @@ class Muir(Univariate):
         element.set("type", "muir")
         element.set("parameters", '{} {} {}'.format(self._e0, self._m_rat, self._kt))
         return element
+
+    @classmethod
+    def from_xml_element(cls, elem):
+        """Generate Muir distribution from an XML element
+
+        Parameters
+        ----------
+        elem : xml.etree.ElementTree.Element
+            XML element
+
+        Returns
+        -------
+        openmc.stats.Muir
+            Muir distribution generated from XML element
+
+        """
+        params = get_text(elem, 'parameters').split()
+        return cls(*map(float, params))
 
 
 class Tabular(Univariate):
@@ -561,6 +697,27 @@ class Tabular(Univariate):
 
         return element
 
+    @classmethod
+    def from_xml_element(cls, elem):
+        """Generate tabular distribution from an XML element
+
+        Parameters
+        ----------
+        elem : xml.etree.ElementTree.Element
+            XML element
+
+        Returns
+        -------
+        openmc.stats.Tabular
+            Tabular distribution generated from XML element
+
+        """
+        interpolation = get_text(elem, 'interpolation')
+        params = [float(x) for x in get_text(elem, 'parameters').split()]
+        x = params[:len(params)//2]
+        p = params[len(params)//2:]
+        return cls(x, p, interpolation)
+
 
 class Legendre(Univariate):
     r"""Probability density given by a Legendre polynomial expansion
@@ -582,28 +739,33 @@ class Legendre(Univariate):
 
     def __init__(self, coefficients):
         self.coefficients = coefficients
+        self._legendre_poly = None
 
     def __call__(self, x):
-        return self._legendre_polynomial(x)
+        # Create Legendre polynomial if we haven't yet
+        if self._legendre_poly is None:
+            l = np.arange(len(self._coefficients))
+            coeffs = (2.*l + 1.)/2. * self._coefficients
+            self._legendre_poly = np.polynomial.Legendre(coeffs)
+
+        return self._legendre_poly(x)
 
     def __len__(self):
-        return len(self._legendre_polynomial.coef)
+        return len(self._coefficients)
 
     @property
     def coefficients(self):
-        poly = self._legendre_polynomial
-        l = np.arange(poly.degree() + 1)
-        return 2./(2.*l + 1.) * poly.coef
+        return self._coefficients
 
     @coefficients.setter
     def coefficients(self, coefficients):
-        cv.check_type('Legendre expansion coefficients', coefficients,
-                      Iterable, Real)
-        l = np.arange(len(coefficients))
-        coeffs = (2.*l + 1.)/2. * np.array(coefficients)
-        self._legendre_polynomial = np.polynomial.Legendre(coeffs)
+        self._coefficients = np.asarray(coefficients)
 
     def to_xml_element(self, element_name):
+        raise NotImplementedError
+
+    @classmethod
+    def from_xml_element(cls, elem):
         raise NotImplementedError
 
 
@@ -658,4 +820,8 @@ class Mixture(Univariate):
         self._distribution = distribution
 
     def to_xml_element(self, element_name):
+        raise NotImplementedError
+
+    @classmethod
+    def from_xml_element(cls, elem):
         raise NotImplementedError
