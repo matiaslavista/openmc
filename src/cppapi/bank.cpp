@@ -1,6 +1,5 @@
 #include "openmc/bank.h"
 #include "openmc/cppapi/bank.h"
-
 #include "openmc/error.h"
 
 #include <stdexcept>
