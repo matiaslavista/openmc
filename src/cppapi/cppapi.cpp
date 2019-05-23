@@ -16,6 +16,9 @@ namespace openmc {
 using std::string;
 using std::vector;
 
+//Example of link to another file;
+void init_test_file(py::module& );
+
 // General exception handler 
 // This function is called by openmc_cppapi functions
 // that wrap error codes, and throw exceptions
@@ -54,6 +57,7 @@ int next_batch()
 
 PYBIND11_MODULE(openmc_cpp, m) 
 {
+
   openmc::init_position(m);
   openmc::init_bank(m);
   openmc::init_eigenvalue(m);
