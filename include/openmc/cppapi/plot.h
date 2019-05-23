@@ -1,7 +1,6 @@
 #ifndef OPENMC_CPP_PLOT_H
 #define OPENMC_CPP_PLOT_H
 
-
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 

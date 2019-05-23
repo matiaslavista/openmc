@@ -60,6 +60,7 @@ PYBIND11_MODULE(openmc_cpp, m)
   openmc::init_bank(m);
   openmc::init_eigenvalue(m);
   openmc::init_plot(m);
+
   m.doc() = R"pbdoc(
         C++ API to OpenMC
         -----------------------
