@@ -70,4 +70,3 @@ extern "C" int openmc_fission_bank(void** ptr, int64_t* n)
 }
 
 } // namespace openmc
-

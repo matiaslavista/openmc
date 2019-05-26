@@ -5,7 +5,7 @@
 #include <pybind11/stl.h>
 
 //This file is exclusively to allow cppapi to see the declaration of adding
-//the bank to the pythong shared module
+//the bank to the python shared module
 
 namespace openmc {
 namespace py = pybind11;
