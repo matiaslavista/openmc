@@ -1,6 +1,7 @@
 #include "openmc/capi.h"
 #include "openmc/cppapi/bank.h"
 #include "openmc/cppapi/position.h"
+#include "openmc/cppapi/eigenvalue.h"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -36,12 +37,11 @@ int init(vector<string> argv = {}, const void* intracomm = nullptr)
 }
 
 int run() { return openmc_run(); }
-
 int finalize() { return openmc_finalize(); }
-
 int simulation_finalize() { return openmc_simulation_finalize(); }
-
 int simulation_init() { return openmc_simulation_init(); }
+int reset() { return openmc_reset(); }
+int hard_reset() { return openmc_hard_reset(); }
 
 int next_batch()
 {
@@ -57,12 +57,10 @@ int next_batch()
 
 PYBIND11_MODULE(openmc_cpp, m) 
 {
-<<<<<<< HEAD:src/cppapi/cppapi.cpp
+
   openmc::init_position(m);
   openmc::init_bank(m);
-=======
-  openmc::init_test_file(m);
->>>>>>> bank_main:src/cppapi/cppapi.cpp
+  openmc::init_eigenvalue(m);
   m.doc() = R"pbdoc(
         C++ API to OpenMC
         -----------------------
@@ -79,6 +77,8 @@ PYBIND11_MODULE(openmc_cpp, m)
   m.def("simulation_finalize", &openmc::simulation_finalize);
   m.def("simulation_init", &openmc::simulation_init);
   m.def("next_batch", &openmc::next_batch);
+  m.def("reset", &openmc::reset);
+  m.def("hard_reset", &openmc::hard_reset);
 #ifdef VERSION_INFO
   m.attr("__version__") = VERSION_INFO;
 #else
