@@ -237,7 +237,8 @@ def test_source_bank(core_run):
     for b in source:
         assert b.E > 0.0
         assert b.wgt == 1
-    # TODO Fix norm
+        norm = b.u.x**2 + b.u.y**2 + b.u.z**2
+        assert((norm>0.99999) and (norm<1.00001))
     #missing linalg.norm test
     #Consider making it and numpy array
     #source_arr = np.array(source, dtype=Bank)
