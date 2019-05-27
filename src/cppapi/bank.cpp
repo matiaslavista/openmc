@@ -16,18 +16,18 @@ namespace py = pybind11;
 //==============================================================================
 
 //Retrieves the global source Particle bank for python
-std::vector<Particle::Bank>& openmc_source_bank_cpp()
+std::vector<Particle::Bank>& source_bank()
 {
-  if (simulation::source_bank.size() == 0) {
+  if (!simulation::source_bank.size()) {
     throw std::runtime_error("Source bank has not been allocated.");
   }
   return simulation::source_bank;
 }
 
 //Retrieves the global fission Particle bank for python
-std::vector<Particle::Bank>& openmc_fission_bank_cpp()
+std::vector<Particle::Bank>& fission_bank()
 {
-  if (simulation::fission_bank.size() == 0) {
+  if (!simulation::fission_bank.size()) {
     throw std::runtime_error("Fission bank has not been allocated.");
   }
   return simulation::fission_bank;
@@ -36,8 +36,8 @@ std::vector<Particle::Bank>& openmc_fission_bank_cpp()
 //Add elements of banks to the module
 void init_bank(py::module& m)
 {
-  m.def("source_bank", &openmc_source_bank_cpp, py::return_value_policy::reference);
-  m.def("fission_bank", &openmc_fission_bank_cpp, py::return_value_policy::reference);
+  m.def("source_bank", &source_bank, py::return_value_policy::reference);
+  m.def("fission_bank", &fission_bank, py::return_value_policy::reference);
   py::enum_<Particle::Type>(m,"Type")
     .value("neutron", Particle::Type::neutron)
     .value("photon", Particle::Type::photon)
