@@ -2,6 +2,7 @@
 #include "openmc/cppapi/bank.h"
 #include "openmc/cppapi/position.h"
 #include "openmc/cppapi/eigenvalue.h"
+#include "openmc/tallies/tally.h"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -53,6 +54,9 @@ int next_batch()
   return status;
 }
 
+int32_t& num_realiztions(){
+  return simulation::n_realizations;
+}
 } // namespace openmc
 
 PYBIND11_MODULE(openmc_core, m) 
@@ -79,6 +83,8 @@ PYBIND11_MODULE(openmc_core, m)
   m.def("next_batch", &openmc::next_batch);
   m.def("reset", &openmc::reset);
   m.def("hard_reset", &openmc::hard_reset);
+  m.def("num_realizations", &openmc::num_realiztions, 
+    py::return_value_policy::reference);
 #ifdef VERSION_INFO
   m.attr("__version__") = VERSION_INFO;
 #else
