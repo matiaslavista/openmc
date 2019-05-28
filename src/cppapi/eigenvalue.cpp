@@ -9,7 +9,8 @@ namespace openmc {
 
 namespace py = pybind11;
 
-std::tuple<double, double> get_keff(){
+std::tuple<double, double> get_keff()
+{
   double arr[2];
   int ret = openmc_get_keff(arr);
   return std::make_tuple(arr[0],arr[1]);

@@ -23,8 +23,9 @@ void init_position(py::module& m)
 {
   py::class_<Position> (m,"Position")
     .def(py::init<double, double, double>())
-    .def(py::init<const vector<double>& >())
-    .def(py::init<const std::array<double, 3>&>())
+    .def(py::init([](std::tuple<double,double,double> tup) {
+      return Position{std::get<0>(tup),std::get<1>(tup), std::get<2>(tup)};
+    }))
     .def(py::self += py::self)
     .def(py::self += double())
     .def(py::self -= py::self)
@@ -53,6 +54,7 @@ void init_position(py::module& m)
     .def_readwrite("x", &Position::x)
     .def_readwrite("y", &Position::y)
     .def_readwrite("z", &Position::z);
+  py::implicitly_convertible<std::tuple<double,double,double>, Position>();
     //[] Operator is not overloadable in python
 }
 

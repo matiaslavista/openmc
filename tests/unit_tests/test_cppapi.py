@@ -235,8 +235,10 @@ def test_statepoint(capi_run):
 def test_source_bank(core_run):
     source = openmc.core.source_bank()
     for b in source:
-      assert b.E > 0.0
-      assert b.wgt == 1
+        assert b.E > 0.0
+        assert b.wgt == 1
+        norm = b.u.x**2 + b.u.y**2 + b.u.z**2
+        assert((norm>0.99999) and (norm<1.00001))
     #missing linalg.norm test
     #Consider making it and numpy array
     #source_arr = np.array(source, dtype=Bank)

@@ -288,16 +288,16 @@ endif()
 #===============================================================================
 
 add_subdirectory(vendor/pybind11)
-pybind11_add_module(openmc_cpp 
+pybind11_add_module(openmc_core 
     src/cppapi/cppapi.cpp 
     src/cppapi/bank.cpp 
     src/cppapi/eigenvalue.cpp 
     src/cppapi/plot.cpp 
     src/cppapi/position.cpp 
     )
-target_compile_options(openmc_cpp PRIVATE ${OpenMP_CXX_FLAGS} 
+target_compile_options(openmc_core PRIVATE ${OpenMP_CXX_FLAGS} 
     -Wno-deprecated-declarations)
-target_link_libraries(openmc_cpp PUBLIC libopenmc)
+target_link_libraries(openmc_core PUBLIC libopenmc)
 
 #===============================================================================
 # openmc executable
@@ -322,11 +322,11 @@ add_custom_command(TARGET libopenmc POST_BUILD
   ${CMAKE_CURRENT_SOURCE_DIR}/openmc/capi/$<TARGET_FILE_NAME:libopenmc>
   COMMENT "Copying libopenmc to Python module directory")
 
-add_custom_command(TARGET openmc_cpp POST_BUILD
+add_custom_command(TARGET openmc_core POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy
-  $<TARGET_FILE:openmc_cpp>
-  ${CMAKE_CURRENT_SOURCE_DIR}/openmc/core/$<TARGET_FILE_NAME:openmc_cpp>
-  COMMENT "Copying openmc_cpp to Python module directory")
+  $<TARGET_FILE:openmc_core>
+  ${CMAKE_CURRENT_SOURCE_DIR}/openmc/core/$<TARGET_FILE_NAME:openmc_core>
+  COMMENT "Copying openmc_core to Python module directory")
 
 #===============================================================================
 # Install executable, scripts, manpage, license

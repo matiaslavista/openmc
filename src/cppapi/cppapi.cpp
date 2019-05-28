@@ -57,7 +57,7 @@ int next_batch()
 
 } // namespace openmc
 
-PYBIND11_MODULE(openmc_cpp, m) 
+PYBIND11_MODULE(openmc_core, m) 
 {
 
   openmc::init_position(m);

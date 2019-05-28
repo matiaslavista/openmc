@@ -31,9 +31,6 @@ extern std::vector<Particle::Bank> master_fission_bank;
 
 } // namespace simulation
 
-std::vector<Particle::Bank>& openmc_source_bank_cpp();
-std::vector<Particle::Bank>& openmc_fission_bank_cpp();
-
 //==============================================================================
 // Non-member functions
 //==============================================================================
