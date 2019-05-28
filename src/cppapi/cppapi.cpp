@@ -43,6 +43,7 @@ int simulation_finalize() { return openmc_simulation_finalize(); }
 int simulation_init() { return openmc_simulation_init(); }
 int reset() { return openmc_reset(); }
 int hard_reset() { return openmc_hard_reset(); }
+int32_t& num_realiztions() { return simulation::n_realizations; }
 
 int next_batch()
 {
@@ -54,9 +55,8 @@ int next_batch()
   return status;
 }
 
-int32_t& num_realiztions(){
-  return simulation::n_realizations;
-}
+
+
 } // namespace openmc
 
 PYBIND11_MODULE(openmc_core, m) 
