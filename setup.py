@@ -35,7 +35,7 @@ kwargs = {
 
     # Data files and librarries
     'package_data': {
-        'openmc.cppapi':['openmc_cpp{}'.format(ext_suffix)],
+        'openmc.core':['openmc_core{}'.format(ext_suffix)],
         'openmc.capi': ['libopenmc.{}'.format(suffix)],
         'openmc.data': ['mass16.txt', 'BREMX.DAT', '*.h5']
     },

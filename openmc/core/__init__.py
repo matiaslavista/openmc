@@ -1,1 +1,1 @@
-from .openmc_cpp import *
+from .openmc_core import *
